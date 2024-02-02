@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mozgat</title>
+    <style>
+        body {
+            background-color: tan;
+        }
+        #main {
+            background-color: white;
+            border: 1px solid black;
+            width: 576px;
+            height: 576px;
+            margin: auto;
+            padding: 10px;
+            font-size: 0pt;
+        }
+        img:hover{
+            background-color: palegreen;
+        }
+        #pont {
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 20pt;
+        }
+    </style>
+    <script>
+
+        const Iconok=["moveX","moveU","moveL","moveR","moveD"];
+        let t=[];
+        let html="";
+        let pont=0;
+        let osszesen=36;
+        function start(){
+            
+            
+            
+            for(let s=0;s<6;s++) {
+                t[s]=[];
+               
+                for(let o=0;o<6;o++) {
+                    let rand = Math.floor(Math.random()*4+1);
+                    t[s][o]=rand;
+                    
+                    html+="<img src='"+Iconok[rand]+".png' id='"+s+"x"+o+"' onclick='katt("+s+","+o+")'>";
+                }
+            }
+            console.log(html)
+            document.getElementById("main").innerHTML=html;
+        }
+
+        function setKep(s,o,index){
+            document.getElementById(s+"x"+o).src=Iconok[index]+".png";
+        }
+
+        function win(){
+            if(osszesen==0) {
+                alert("Győztél!");
+            }
+        }
+
+        function csere(s,o){
+            if(t[s][o]==1) {
+                let b=t[s-1][o];
+                t[s][o]=t[s-1][o]
+                t[s-1][o]=1;
+                setKep(s,o,t[s][o])
+                setKep(s-1,o,t[s-1][o])
+                if(b!=0) {
+                    pont--;
+                }
+            }
+            else if(t[s][o]==2) {
+                let b=t[s][o-1];
+                t[s][o]=t[s][o-1]
+                t[s][o-1]=2;
+                setKep(s,o,t[s][o])
+                setKep(s,o-1,t[s][o-1])
+                if(b!=0) {
+                    pont--;
+                }
+            }
+            else if(t[s][o]==3) {
+                let b=t[s][o+1];
+                t[s][o]=t[s][o+1]
+                t[s][o+1]=3;
+                setKep(s,o,t[s][o])
+                setKep(s,o+1,t[s][o+1])
+                if(b!=0) {
+                    pont--;
+                }
+            }
+            else if(t[s][o]==4) {
+                let b=t[s+1][o];
+                t[s][o]=t[s+1][o]
+                t[s+1][o]=4;
+                setKep(s,o,t[s][o])
+                setKep(s+1,o,t[s+1][o])
+                if(b!=0) {
+                    pont--;
+                }
+            } 
+        }
+
+        function katt(s,o){
+            kep=t[s][o];
+            if(kep==1) {
+                if(s==0 &&o>=0 && o<=5) {
+                    setKep(s,o,0);
+                    t[s][o]=0;
+                    pont++;
+                    osszesen--;
+                    
+                }
+                else {
+                    csere(s,o);
+                    
+                    
+                }
+            }
+            if(kep==2) {
+                if(o==0 &&s>=0 && s<=5) {
+                    setKep(s,o,0);
+                    t[s][o]=0;
+                    pont++;
+                    osszesen--;
+                }
+                else {
+                    csere(s,o);
+                    
+                }
+               
+            }
+            if(kep==3) {
+                if(o==5 &&s>=0 && s<=5) {
+                    setKep(s,o,0);
+                    t[s][o]=0;
+                    pont++;
+                    osszesen--;
+                }
+                else {
+                    csere(s,o);
+                    
+                }
+            } 
+            if(kep==4) {
+                if(s==5 &&o>=0 && o<=5) {
+                    setKep(s,o,0);
+                    t[s][o]=0;
+                    pont++;
+                    osszesen--;
+                }
+                else {
+                    csere(s,o);
+                    
+                }    
+            } 
+            document.getElementById("pontszam").innerHTML=pont;
+            win();
+    
+}
+    </script>
+</head>
+<body onload="start()">
+    
+        <div id="main"></div>
+        <div id="pont">Pontszám: <span id="pontszam">0</span></div>
+        
+</body>
+</html>
